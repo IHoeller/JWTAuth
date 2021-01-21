@@ -4,39 +4,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.LocalStorage;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace JWTAuth.Client.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IHttpService _httpService;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
 
         public AuthService(
-                           HttpClient httpClient,
-                           IHttpService httpService,
                            AuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage)
         {
-            _httpClient = httpClient;
-            _httpService = httpService;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
         }
 
-        public async Task<JWTAuth.Shared.Auth.LoginResponse> Login(JWTAuth.Shared.Auth.LoginRequest loginModel)
+        public async Task<string> Login(JWTAuth.Shared.Auth.LoginRequest loginModel)
         {
-            var result = await _httpService.Post<JWTAuth.Shared.Auth.LoginResponse>("api/login", loginModel);
+            string result = "";
 
-            if (result.token != "")
+            if (loginModel.Username == "test" && loginModel.Password == "test")
             {
-                await _localStorage.SetItemAsync("authToken", result.token);
-                ((Helpers.AuthStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(result.token);
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.token);
+                result = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBnbWFpbC5jb20ifQ.Qq1e_nPCnRNNJb1NF36ZVEkLT4KfHu8A2u3uEBr7S5Q";
+            }
+
+            if (result != "")
+            {
+                await _localStorage.SetItemAsync("authToken", result);
+                ((Helpers.AuthStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(result);
 
                 return result;
             }
@@ -48,15 +44,13 @@ namespace JWTAuth.Client.Services
         {
             await _localStorage.RemoveItemAsync("authToken");
             ((Helpers.AuthStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-            _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
     }
 
     public interface IAuthService
     {
-        Task<JWTAuth.Shared.Auth.LoginResponse> Login(JWTAuth.Shared.Auth.LoginRequest loginModel);
+        Task<String> Login(JWTAuth.Shared.Auth.LoginRequest loginModel);
         Task Logout();
-        //Task<RegisterResult> Register(RegisterModel registerModel);
     }
 }

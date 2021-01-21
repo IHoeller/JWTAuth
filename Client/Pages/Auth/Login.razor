@@ -43,9 +43,8 @@
         try
         {
             var result = await AuthService.Login(model);
-            Console.WriteLine(result);
             var returnUrl = NavigationManager.QueryString("returnUrl") ?? "";
-            //NavigationManager.NavigateTo(returnUrl);
+            NavigationManager.NavigateTo(returnUrl);
         }
         catch (Exception ex)
         {

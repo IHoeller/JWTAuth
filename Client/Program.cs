@@ -24,13 +24,13 @@ namespace JWTAuth.Client
             builder.Services.AddAuthorizationCore();
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddScoped<AuthenticationStateProvider, Helpers.AuthStateProvider>();
-            builder.Services.AddScoped<Services.IHttpService, Services.HttpService>();
             builder.Services.AddScoped<Services.IAuthService, Services.AuthService>();
-            
 
-            await builder.Build().RunAsync();
+
+            var host = builder.Build();
+               
+            await host.RunAsync();
         }
     }
 }

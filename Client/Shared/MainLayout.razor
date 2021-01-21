@@ -10,6 +10,9 @@
             <Authorized>
                 <div class="top-row px-4">
                     <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+                    <NavLink class="ml-md-auto" href="auth/logout">
+                        Logout (@context.User.Identity.Name)
+                    </NavLink>
                 </div>
             </Authorized>
             <NotAuthorized>
