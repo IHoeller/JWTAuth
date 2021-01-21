@@ -1,6 +1,7 @@
 ﻿@page "/auth/login"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
+@inject Services.IAuthService AuthService
 
 <div class="card">
     <h4 class="card-header">Login</h4>
@@ -41,8 +42,10 @@
         loading = true;
         try
         {
+            var result = await AuthService.Login(model);
+            Console.WriteLine(result);
             var returnUrl = NavigationManager.QueryString("returnUrl") ?? "";
-            NavigationManager.NavigateTo(returnUrl);
+            //NavigationManager.NavigateTo(returnUrl);
         }
         catch (Exception ex)
         {
