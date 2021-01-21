@@ -26,7 +26,11 @@ namespace JWTAuth.Client.Services
 
             if (loginModel.Username == "test" && loginModel.Password == "test")
             {
-                result = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBnbWFpbC5jb20ifQ.Qq1e_nPCnRNNJb1NF36ZVEkLT4KfHu8A2u3uEBr7S5Q";
+                // Contains all three roles (role1, role2, role3)
+                //result = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBnbWFpbC5jb20iLCJyb2xlcyI6WyJyb2xlMSIsInJvbGUyIiwicm9sZTMiXX0.jOuWeyI3SReGT3NncX3qxDaS8krTsjMrzmFvza3x4xM";
+                // Contains two roles (role1, role3)
+                result = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInJvbGVzIjpbInJvbGUxIiwicm9sZTMiXX0.oMFZvNC7GXEGU - MO4txeRuvkFOec9EcQ0MRpf5ywp8w";
+
             }
 
             if (result != "")

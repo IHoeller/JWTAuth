@@ -40,11 +40,30 @@ namespace JWTAuth.Client.Helpers
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+            keyValuePairs.TryGetValue("roles", out object roles);
 
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
-            if (keyValuePairs.ContainsKey("Name"))
+            if (roles != null)
             {
-                claims.Add(new Claim(ClaimTypes.Name, keyValuePairs["Name"].ToString()));
+                if (roles.ToString().Trim().StartsWith("["))
+                {
+                    var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
+
+                    foreach (var parsedRole in parsedRoles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, parsedRole));
+                    }
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+                }
+
+                keyValuePairs.Remove(ClaimTypes.Role);
+            }
+            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+            if (keyValuePairs.ContainsKey("name"))
+            {
+                claims.Add(new Claim(ClaimTypes.Name, keyValuePairs["name"].ToString()));
             }
 
             return claims;
